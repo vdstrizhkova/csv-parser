@@ -1,0 +1,185 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>csvparser</groupId>
+    <artifactId>csvparser</artifactId>
+    <version>1</version>
+
+    <properties>
+        <java-lang.release>11</java-lang.release>
+        <maven.compiler.source>${java-lang.release}</maven.compiler.source>
+        <maven.compiler.target>${java-lang.release}</maven.compiler.target>
+        <maven.compiler.release>${java-lang.release}</maven.compiler.release>
+
+        <scala.compat.version>2.13</scala.compat.version>
+        <scala.version>${scala.compat.version}.4</scala.version>
+
+        <surefire.parallelism>suites</surefire.parallelism>
+        <scalatest.version>3.2.2</scalatest.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nrinaudo</groupId>
+            <artifactId>kantan.csv_${scala.compat.version}</artifactId>
+            <version>0.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nrinaudo</groupId>
+            <artifactId>kantan.csv-generic_${scala.compat.version}</artifactId>
+            <version>0.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nrinaudo</groupId>
+            <artifactId>kantan.codecs_${scala.compat.version}</artifactId>
+            <version>0.5.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-ext</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.compat.version}</artifactId>
+            <version>${scalatest.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-scala_${scala.compat.version}</artifactId>
+            <version>1.16.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.scalatest</groupId>
+                    <artifactId>scalatest-maven-plugin</artifactId>
+                    <configuration>
+                        <parallel>true</parallel>
+                        <spanScaleFactor>10</spanScaleFactor>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <configuration>
+                    <suffixes>(?&lt;!WebDriver|Acceptance)(Test|Spec|Suite)</suffixes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.4.0</version>
+                <configuration>
+                    <args>
+                        <arg>-dependencyfile</arg>
+                        <arg>${project.build.directory}/.scala_dependencies</arg>
+                        <arg>-target:jvm-1.8</arg>
+                        <arg>-feature</arg>
+                        <arg>-deprecation:false</arg>
+                        <arg>-unchecked</arg>
+                        <arg>-Xfuture</arg>
+                        <arg>-explaintypes</arg>
+                        <arg>-Xfatal-warnings</arg>
+                        <arg>-Xlint:adapted-args</arg>
+                        <arg>-Xlint:delayedinit-select</arg>
+                        <arg>-Xlint:doc-detached</arg>
+                        <arg>-Xlint:inaccessible</arg>
+                        <arg>-Xlint:infer-any</arg>
+                        <arg>-Xlint:missing-interpolator</arg>
+                        <arg>-Xlint:nullary-unit</arg>
+                        <arg>-Xlint:option-implicit</arg>
+                        <arg>-Xlint:package-object-classes</arg>
+                        <arg>-Xlint:poly-implicit-overload</arg>
+                        <arg>-Xlint:private-shadow</arg>
+                        <arg>-Xlint:stars-align</arg>
+                        <arg>-Xlint:type-parameter-shadow</arg>
+                        <arg>-Ywarn-dead-code</arg>
+                    </args>
+                    <javacArgs>
+                        <arg>-Xlint:deprecation</arg>
+                        <arg>-Xlint:unchecked</arg>
+                    </javacArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.7.0</version>
+                <configuration>
+                    <scala>
+                        <scalafmt>
+                            <version>2.7.5</version>
+                            <file>${basedir}/.scalafmt.conf</file>
+                        </scalafmt>
+                    </scala>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/webapp</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${java-lang.release}</release>
+                    <compilerArgs>
+                        <arg>-J-Djava.awt.headless=true</arg>
+                        <arg>-Xlint:deprecation</arg>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

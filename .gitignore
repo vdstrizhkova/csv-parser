@@ -1,0 +1,47 @@
+# Eclipse and maven-eclipse-plugin
+.classpath
+.classpath.old
+.project
+.settings/
+.springBeans
+.scala_dependencies
+
+# IntelliJ files
+.idea
+*.iws
+*.ipr
+*.iml
+
+# target directories
+instrumented/
+reports/
+build/
+classes/
+target/
+run/
+dist/
+cobertura.ser
+junitvm*
+bin/
+
+# logs
+ebay.log
+logs/
+ui/.tomcatplugin
+.#webclasspath
+ui/work/
+
+# others
+.Trashes
+.DS_Store
+.fseventsd
+.TemporaryItems
+Thumbs.db
+velocity.log
+jqenv-*.html
+harm.txt
+activemq-data
+
+# filtered-resources are generated per-run
+src/main/filtered-resources/
+
