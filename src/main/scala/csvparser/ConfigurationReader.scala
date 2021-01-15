@@ -15,7 +15,9 @@ import scala.io.Codec
 case class Country(countryId: Int, localizedName: String, alpha2: String, alpha3: String)
 
 class ReadCountries {
-  implicit val codec: Codec = Codec.UTF8
+  implicit val codec: Codec                                   = Codec.UTF8
+  implicit val countriesHeaderDecoder: HeaderDecoder[Country] =
+    HeaderDecoder.decoder("id", "name", "alpha2", "alpha3")(Country.apply)
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
